@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MoodTunes - Discover Playlists by Emotion</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Load Lucide Icons for the UI -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        /* Custom background gradient for a more attractive, modern look */
+        body {
+            font-family: 'Inter', sans-serif;
+            /* VIBRANT GRADIENT: Magenta-Purple to Neon Blue */
+            background: linear-gradient(135deg, #e5387d 0%, #673ab7 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+        /* Custom styles for the glassy card effect */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15); /* Slightly less opaque white */
+            backdrop-filter: blur(15px); /* More blur */
+            border-radius: 1.5rem;
+            box-shadow: 0 10px 40px 0 rgba(0, 0, 0, 0.45); /* Stronger shadow */
+            border: 1px solid rgba(255, 255, 255, 0.25);
+        }
+        /* Style for the textarea and results box */
+        #mood-text, #results-container {
+            transition: all 0.3s ease-in-out;
+        }
+        /* Custom gradient for the button */
+        #discover-btn {
+            /* Button Gradient: Strong Teal to Deep Purple */
+            background: linear-gradient(90deg, #1abc9c 0%, #8e44ad 100%);
+            box-shadow: 0 4px 20px rgba(142, 68, 173, 0.6);
+            transition: all 0.2s ease;
+        }
+        #discover-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        #discover-btn:active {
+            transform: translateY(1px);
+        }
+        /* Adjusted focus ring color */
+        #mood-text:focus {
+            --tw-ring-color: #1abc9c;
+        }
+    </style>
+</head>
+<body class="selection:bg-pink-300 selection:text-white">
+
+    <div class="w-full max-w-lg mx-auto p-4 md:p-8">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-white text-5xl font-bold mb-2 tracking-tight flex items-center justify-center">
+                <!-- Lucide Star (filled with custom color) - Changed to a vibrant Gold/Yellow -->
+                <span class="mr-2" style="color: #ffcc00;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-zap-stroke-fill"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="#ffcc00" stroke="none"></polygon></svg>
+                </span>
+                MoodTunes
+                <!-- Lucide Music Note - Changed to a bright Teal -->
+                <span class="ml-2 text-green-300" style="color: #1abc9c;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-music"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+                </span>
+            </h1>
+            <p class="text-white text-opacity-80 text-lg font-medium">
+                Share how you're feeling, and we'll find the perfect playlists to match your mood.
+            </p>
+        </header>
+
+        <!-- Main Card Container -->
+        <main id="main-card" class="glass-card p-6 md:p-8 space-y-6">
+
+            <!-- Input Section -->
+            <section id="input-section">
+                <label for="mood-text" class="block text-white text-xl font-semibold mb-2">How are you feeling today?</label>
+                <textarea
+                    id="mood-text"
+                    rows="4"
+                    class="w-full p-4 text-white text-lg bg-white bg-opacity-30 border border-white border-opacity-30 rounded-xl placeholder-white placeholder-opacity-70 focus:outline-none focus:ring-4 focus:ring-green-400 focus:ring-opacity-50 resize-none"
+                    placeholder="Express your emotions... Tell us about your day, your thoughts, or how you're feeling right now..."
+                    maxlength="500"
+                ></textarea>
+
+                <button
+                    id="discover-btn"
+                    class="mt-4 w-full flex items-center justify-center text-white text-lg font-bold py-3 px-6 rounded-full transition duration-200"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-headphones mr-2"><path d="M11.5 5.5V12h6.5"/><path d="M18 10a8 8 0 1 1-16 0V5.5A2.5 2.5 0 0 1 4.5 3H7"/><path d="M12 2v20"/><path d="M10 18h4"/></svg>
+                    Discover My Playlists
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-send ml-2"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                </button>
+                <p class="text-center text-white text-opacity-70 text-sm mt-2">
+                    Press Ctrl + Enter to analyze
+                </p>
+            </section>
+            
+            <!-- Loading Indicator & Status Message -->
+            <div id="status-message" class="hidden text-center text-white font-medium p-4 rounded-xl" role="status">
+                <div class="flex items-center justify-center">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span id="status-text">Analyzing your mood...</span>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <section id="results-container" class="hidden pt-4 border-t border-white border-opacity-30 space-y-4">
+                <h2 class="text-white text-2xl font-bold flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-rocket mr-2"><path d="M4.5 20.5 12 12l1.5 1.5c.3.3.4 1 .2 1.4L11.8 17l4.3-4.3 1.4.2c.4-.2 1.1-.1 1.4.2L22 12 4 4"/></svg>
+                    Your Mood: <span id="identified-emotion" class="ml-2 capitalize text-yellow-300" style="color: #ffcc00;"></span>
+                </h2>
+                <p class="text-white text-opacity-80 font-medium">
+                    We found the following playlists to match the suggested genre(s):
+                </p>
+                <ul id="playlist-list" class="space-y-3">
+                    <!-- Playlist results will be injected here -->
+                </ul>
+                <div class="pt-4 text-center">
+                    <button onclick="resetApp()" class="text-white bg-white bg-opacity-20 hover:bg-opacity-30 font-semibold py-2 px-4 rounded-full transition duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-refresh-cw inline-block mr-1"><path d="M21 12a9 9 0 0 0-9-9c-2.3 0-4.3.8-6 2.1"/><path d="M3 12a9 9 0 0 0 9 9c2.3 0 4.3-.8 6-2.1"/><path d="M17 14h4v4"/><path d="M3 10h4V6"/></svg>
+                        Analyze New Mood
+                    </button>
+                </div>
+            </section>
+        </main>
+
+        <!-- Custom Alert Modal (for non-API errors) -->
+        <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center p-4 z-50">
+            <div class="bg-white p-6 rounded-xl shadow-2xl w-full max-w-sm">
+                <h3 id="modal-title" class="text-xl font-bold text-gray-800 mb-4">Error</h3>
+                <p id="modal-message" class="text-gray-600 mb-6">Something went wrong.</p>
+                <button onclick="closeModal()" class="w-full bg-red-500 hover:bg-red-600 text-white font-bold py-2 rounded-lg transition duration-200">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Configuration ---
+        // NOTE: Replace this with the actual URL of your running FastAPI server.
+        const API_BASE_URL = 'http://localhost:8000';
+        const ANALYZE_ENDPOINT = '/api/emotion'; // Assuming this is the endpoint
+        const MAX_RETRIES = 5;
+        const INITIAL_BACKOFF_MS = 1000;
+
+        // --- DOM Elements ---
+        const moodTextarea = document.getElementById('mood-text');
+        const discoverButton = document.getElementById('discover-btn');
+        const statusMessageDiv = document.getElementById('status-message');
+        const statusTextSpan = document.getElementById('status-text');
+        const resultsContainer = document.getElementById('results-container');
+        const identifiedEmotionSpan = document.getElementById('identified-emotion');
+        const playlistList = document.getElementById('playlist-list');
+        const modal = document.getElementById('modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        // --- Utility Functions ---
+
+        // Exponential backoff retry logic for fetch
+        async function fetchWithRetry(url, options, retries = MAX_RETRIES) {
+            for (let i = 0; i < retries; i++) {
+                try {
+                    const response = await fetch(url, options);
+                    if (response.ok) {
+                        return response;
+                    } else if (response.status === 429) {
+                        // Too Many Requests, try again
+                        console.warn('API limit reached, retrying...');
+                        throw new Error('Rate Limit Exceeded');
+                    } else {
+                        // Other non-200 errors are not recoverable via retry
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                } catch (error) {
+                    if (i === retries - 1) {
+                        // Final retry failed
+                        throw error;
+                    }
+                    // Wait with exponential backoff
+                    const delay = INITIAL_BACKOFF_MS * Math.pow(2, i) + Math.random() * 1000;
+                    await new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+        }
+
+        function showModal(title, message) {
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeModal() {
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function setStatus(text, isLoading = true) {
+            statusTextSpan.textContent = text;
+            if (isLoading) {
+                statusMessageDiv.classList.remove('hidden', 'text-red-400');
+                statusMessageDiv.classList.add('bg-white', 'bg-opacity-20');
+                discoverButton.disabled = true;
+                moodTextarea.disabled = true;
+            } else {
+                statusMessageDiv.classList.add('hidden');
+                discoverButton.disabled = false;
+                moodTextarea.disabled = false;
+            }
+        }
+
+        function resetApp() {
+            moodTextarea.value = '';
+            resultsContainer.classList.add('hidden');
+            document.getElementById('input-section').classList.remove('hidden');
+            moodTextarea.focus();
+        }
+
+        // --- Main Logic ---
+
+        async function analyzeMood() {
+            const text = moodTextarea.value.trim();
+            if (text.length < 5) {
+                showModal('Input Required', 'Please enter a few words about your mood or day before discovering playlists.');
+                return;
+            }
+
+            // 1. Show Loading State
+            document.getElementById('input-section').classList.add('hidden');
+            resultsContainer.classList.add('hidden');
+            setStatus('Analyzing your mood...');
+            
+            try {
+                // 2. Make API Call
+                const response = await fetchWithRetry(`${API_BASE_URL}${ANALYZE_ENDPOINT}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: text })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server responded with status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                
+                // 3. Process and Display Results
+                setStatus('Analysis Complete', false);
+
+                const emotion = data.emotion;
+                const playlists = data.playlists || [];
+
+                identifiedEmotionSpan.textContent = emotion.toUpperCase();
+                playlistList.innerHTML = ''; // Clear previous results
+
+                if (playlists.length > 0) {
+                    playlists.forEach(p => {
+                        const listItem = document.createElement('li');
+                        // Ensure playlist card uses the new glass card style
+                        listItem.className = 'flex items-center p-3 glass-card hover:bg-white hover:bg-opacity-30 transition duration-150';
+                        listItem.innerHTML = `
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-spotify mr-3 text-green-300" style="color: #1abc9c;"><circle cx="12" cy="12" r="10"/><path d="M8 11.5a2.5 2.5 0 0 1 5 0"/><path d="M12 15a4.5 4.5 0 0 1 7.5-.5"/><path d="M5.5 13.5a6.5 6.5 0 0 1 11 0"/></svg>
+                            <a href="${p.url}" target="_blank" rel="noopener noreferrer" class="flex-grow text-white font-medium hover:underline">
+                                ${p.name}
+                            </a>
+                        `;
+                        playlistList.appendChild(listItem);
+                    });
+                } else {
+                    playlistList.innerHTML = `<li class="text-white text-opacity-80 p-3">No matching Spotify playlists were found for this mood. Try a different expression!</li>`;
+                }
+
+                resultsContainer.classList.remove('hidden');
+
+
+            } catch (error) {
+                console.error('API Error:', error);
+                setStatus('Error', false); // Hide loading
+                document.getElementById('input-section').classList.remove('hidden'); // Show input again
+                showModal(
+                    'Connection Error',
+                    `Could not connect to the backend server (${API_BASE_URL}). Please ensure your FastAPI application is running correctly.`
+                );
+            }
+        }
+
+        // --- Event Listeners ---
+
+        discoverButton.addEventListener('click', analyzeMood);
+
+        // Allow Ctrl+Enter to submit
+        moodTextarea.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.key === 'Enter') {
+                event.preventDefault(); // Prevent newline
+                analyzeMood();
+            }
+        });
+
+        // Initialize Lucide Icons
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+
+    </script>
+</body>
+</html>
