@@ -6,7 +6,7 @@
 
 Turn emotions into personalized Spotify playlists using AI
 
-Emotions2Music is an AI-powered web application that analyzes a user's text, detects their emotion, and recommends a curated Spotify playlist based on that emotion.
+MoodTunes is an AI-powered web application that analyzes a user's text, detects their emotion, and recommends a curated Spotify playlist based on that emotion.
 Built with FastAPI, PyTorch NLP model, and Spotify Web API, this project combines machine learning with real-time music personalization.
 
 # Features
