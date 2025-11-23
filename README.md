@@ -1,6 +1,8 @@
+🎶 MoodTunes
+
 [alt text](image.png)
 
-🎶 Emotions2Music
+
 
 Turn emotions into personalized Spotify playlists using AI
 
@@ -18,7 +20,7 @@ Built with FastAPI, PyTorch NLP model, and Spotify Web API, this project combine
     Uses Spotify API (Client Credentials Flow)
 
     Returns curated playlist info (name, URL, image)
-    
+
 # install all dependencies 
     cd backend
     pip install -r requirements.txt
